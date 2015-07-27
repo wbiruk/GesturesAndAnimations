@@ -81,8 +81,6 @@
 		2EB3DD8B1B66265700B20184 /* GesturesAndAnimations */ = {
 			isa = PBXGroup;
 			children = (
-				2EB3DD901B66265700B20184 /* AppDelegate.h */,
-				2EB3DD911B66265700B20184 /* AppDelegate.m */,
 				2EB3DD931B66265700B20184 /* ViewController.h */,
 				2EB3DD941B66265700B20184 /* ViewController.m */,
 				2EB3DD961B66265700B20184 /* Main.storyboard */,
@@ -96,6 +94,8 @@
 		2EB3DD8C1B66265700B20184 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2EB3DD901B66265700B20184 /* AppDelegate.h */,
+				2EB3DD911B66265700B20184 /* AppDelegate.m */,
 				2EB3DD8D1B66265700B20184 /* Info.plist */,
 				2EB3DD8E1B66265700B20184 /* main.m */,
 			);
