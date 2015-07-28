@@ -11,28 +11,62 @@
 @interface ViewController ()
 @property (strong, nonatomic) NSMutableArray *blocks; // of UIView
 @property (weak, nonatomic) IBOutlet UIView *playgroundView;
-@property (strong, nonatomic) IBOutlet UIPanGestureRecognizer *panGestureRecognizer;
 
 
 @end
 
 @implementation ViewController
 
-static const CGSize DEFAULT_SIZE = { 40, 40 };
+static const CGSize DEFAULT_SIZE = { 100, 100 };
+static const CGSize MIN_SIZE = { 80, 80 };
+static const CGSize MAX_SIZE = { 200, 200 };
 
-- (IBAction)createRectButton:(UIButton *)sender {
-    
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+- (IBAction)createRectButtonTapped:(UIBarButtonItem *)sender {
+   
     UIView *rect = [UIView new];
-    rect.frame = CGRectMake(self.playgroundView.center.x - DEFAULT_SIZE.width,
-                            self.playgroundView.center.y - DEFAULT_SIZE.height,
+    rect.frame = CGRectMake(0, //self.playgroundView.center.x - DEFAULT_SIZE.width,
+                            0, //self.playgroundView.center.y - DEFAULT_SIZE.height,
                             DEFAULT_SIZE.width,
                             DEFAULT_SIZE.height);
+    rect.center = self.playgroundView.center;
     
     rect.backgroundColor = [self randomColor];
     [self.playgroundView addSubview:rect];
-    [self.blocks addObject:rect];
     
-    [rect addGestureRecognizer:self.panGestureRecognizer];
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragIt:)];
+    [rect addGestureRecognizer:panGestureRecognizer];
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapIt:)];
+    [rect addGestureRecognizer:tapGestureRecognizer];
+    
+    UIRotationGestureRecognizer *rotationGestureRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotateIt:)];
+    [rect addGestureRecognizer:rotationGestureRecognizer];
+    rotationGestureRecognizer.delegate = self;
+    
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchIt:)];
+    [rect addGestureRecognizer:pinchGestureRecognizer];
+    pinchGestureRecognizer.delegate = self;
+    
+    [self gestureRecognizer:rotationGestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:pinchGestureRecognizer];
+    
+}
+
+- (IBAction)removeAllSquaresButtonTapped:(UIBarButtonItem *)sender {
+    
+    for (UIView *view in self.playgroundView.subviews) {
+        [UIView animateWithDuration:1
+                         animations:^{
+                             //view.transform = CGAffineTransformMakeTranslation((arc4random()%20 - 5)*pow(-1, arc4random()%2) , (arc4random()%20 - 5)*pow(-1, arc4random()%2));
+                             view.alpha = 0;
+                         }
+         ];
+        
+    }
+   
+    
 }
 
 
