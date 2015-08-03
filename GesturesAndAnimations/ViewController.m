@@ -118,18 +118,43 @@ static const CGSize MAX_SIZE = { 200, 200 };
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.blocks = [NSMutableArray new];
-    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragIt:)];
+    //self.blocks = [NSMutableArray new];
+    
+    
+}
+
+- (void)pinchIt:(UIPinchGestureRecognizer *)pinchGestureRecognizer {
+    
+    CGFloat scale = pinchGestureRecognizer.scale;
+    
+    if ([pinchGestureRecognizer view].frame.size.width * scale < MAX_SIZE.width &&
+        [pinchGestureRecognizer view].frame.size.width * scale > MIN_SIZE.width) {
+    
+        
+        [[pinchGestureRecognizer view] setTransform:CGAffineTransformScale([pinchGestureRecognizer view].transform, scale, scale)];
+        pinchGestureRecognizer.scale = 1;
+    }
+}
+
+- (void)rotateIt:(UIRotationGestureRecognizer *)rotationGestureRecognizer {
+
+    CGFloat rotation = rotationGestureRecognizer.rotation;
+    [[rotationGestureRecognizer view] setTransform:CGAffineTransformRotate([rotationGestureRecognizer view].transform, rotation)];
+    rotationGestureRecognizer.rotation = 0;
+}
+
+
+- (void)tapIt:(UITapGestureRecognizer *)tapGestureRecognizer {
+    
+    [[tapGestureRecognizer view] setBackgroundColor:[self randomColor]];
     
 }
 
 - (void)dragIt:(UIPanGestureRecognizer *)panGestureRecognizer {
     
     CGPoint touchLocation = [panGestureRecognizer locationInView:self.playgroundView];
-    //[self.blocks[index] setCenter:touchLocation];
-    if ([panGestureRecognizer view] != self.view) {
-        [[panGestureRecognizer view] setCenter:touchLocation];
-    }
+    [[panGestureRecognizer view] setCenter:touchLocation];
+    
     
 }
 
